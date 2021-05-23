@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -129,4 +129,9 @@
             </div>
         </div>
     </body>
-</html>
+</html> --}}
+
+<h1>Dimensi Kini</h1>
+<h2>SSO Client 1</h2>
+
+<a href="login"> Login with SSO </a>
