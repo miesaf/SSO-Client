@@ -27,6 +27,7 @@ Route::get('/login', function (Request $request) {
         "client_id" => "937fc8e4-587d-4228-838c-cb36d6c4b671",
         "redirect_uri" => "http://localhost/SSO-Client-1/public/callback",
         "response_type" => "code",
+        "scope" => "view-user",
         "state" => $state
     ]);
 
