@@ -24,15 +24,15 @@ Route::get('/login', function (Request $request) {
     $request->session()->put("state", $state = Str::random(40));
 
     $query = http_build_query([
-        "client_id" => "937fc8e4-587d-4228-838c-cb36d6c4b671",
-        "redirect_uri" => "http://localhost/SSO-Client-1/public/callback",
+        "client_id" => config('auth.passport.client_id'),
+        "redirect_uri" => config('auth.passport.redirect_uri'),
         "response_type" => "code",
-        "scope" => "view-user",
+        "scope" => null,
         "state" => $state
     ]);
 
-    return redirect("http://localhost/SSO/public/oauth/authorize?" . $query);
-});
+    return redirect(config('auth.passport.url') . "/oauth/authorize?" . $query);
+})->name('login.sso');
 
 Route::get('/callback', function (Request $request) {
     $state = $request->session()->pull("state");
@@ -40,12 +40,12 @@ Route::get('/callback', function (Request $request) {
     throw_unless(strlen($state) > 0 && $state == $request->state, InvalidArgumentException::class);
 
     $response = Http::asForm()->post(
-        "http://localhost/SSO/public/oauth/token",
+        config('auth.passport.url') . "/oauth/token",
         [
             "grant_type" => "authorization_code",
-            "client_id" => "937fc8e4-587d-4228-838c-cb36d6c4b671",
-            "client_secret" => "1Xk4c6rZCIzru7B2S11HjBwwwlS7HJjeLK1JNMnv",
-            "redirect_uri" => "http://localhost/SSO-Client-1/public/callback",
+            "client_id" => config('auth.passport.client_id'),
+            "client_secret" => config('auth.passport.client_secret'),
+            "redirect_uri" => config('auth.passport.redirect_uri'),
             "code" => $request->code
         ]
     );
@@ -60,7 +60,14 @@ Route::get('/authuser', function (Request $request) {
     $response = Http::withHeaders([
         "Accept" => "application/json",
         "Authorization" => "Bearer " . $access_token
-    ])->get("http://localhost/SSO/public/api/user");
+    ])->get(config('auth.passport.url') . "/api/user");
 
     return $response->json();
+})->name('auth.user');
+
+Route::get('/logout', function (Request $request) {
+    $request->session()->flush();
+    $request->session()->regenerate();
+
+    return redirect("/");
 });
