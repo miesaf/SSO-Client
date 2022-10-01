@@ -137,7 +137,7 @@
 </head>
 <body>
     <h1>Dimensi Kini</h1>
-    <h2>SSO Client 1</h2>
+    <h2>{{ config('app.name') }}</h2>
 
     @if(session()->has('access_token'))
     <a href="{{ route('auth.user') }}"><button> Get User Details </button></a>
