@@ -62,7 +62,7 @@ Route::get('/authuser', function (Request $request) {
         "Authorization" => "Bearer " . $access_token
     ])->get(config('auth.passport.url') . "/api/user");
 
-    return $response->json();
+    return $response->status() == 401 ? redirect()->route('logout') : $response->json();
 })->name('auth.user');
 
 Route::get('/logout', function (Request $request) {
