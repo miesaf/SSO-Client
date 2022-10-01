@@ -34,7 +34,7 @@ Route::get('/login', function (Request $request) {
     return redirect(config('auth.passport.url') . "/oauth/authorize?" . $query);
 })->name('login.sso');
 
-Route::get('/callback', function (Request $request) {
+Route::get('/auth/callback', function (Request $request) {
     $state = $request->session()->pull("state");
 
     throw_unless(strlen($state) > 0 && $state == $request->state, InvalidArgumentException::class);
@@ -70,4 +70,4 @@ Route::get('/logout', function (Request $request) {
     $request->session()->regenerate();
 
     return redirect("/");
-});
+})->name('logout');

@@ -139,10 +139,11 @@
     <h1>Dimensi Kini</h1>
     <h2>SSO Client 1</h2>
 
-    @auth
+    @if(session()->has('access_token'))
     <a href="{{ route('auth.user') }}"><button> Get User Details </button></a>
+    <a href="{{ route('logout') }}"><button> Logout (Local) </button></a>
     @else
     <a href="{{ route('login.sso') }}"><button> Login with SSO </button></a>
-    @endauth
+    @endif
 </body>
 </html>
